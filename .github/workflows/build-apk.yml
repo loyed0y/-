@@ -15,15 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check source archive
-        run: test -f "LOYED (3).zip"
-
-      - name: Extract LOYED web source
+      - name: Restore LOYED source archive
         run: |
-          mkdir -p source www
-          unzip -q "LOYED (3).zip" -d source
-          test -f source/LOYED/index.html
-          cp -R source/LOYED/. www/
+          base64 --decode LOYED-source.zip.b64 > loyed-source.zip
+          mkdir -p www
+          unzip -q loyed-source.zip -d www
+          test -f www/index.html
+          test -f www/js/app.js
+          test -f www/css/styles.css
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -40,7 +39,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund
 
       - name: Generate Android project
         run: npx cap add android
@@ -50,7 +49,7 @@ jobs:
 
       - name: Build debug APK
         working-directory: android
-        run: chmod +x gradlew && ./gradlew assembleDebug
+        run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
