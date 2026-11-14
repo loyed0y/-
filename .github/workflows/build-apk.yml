@@ -17,8 +17,8 @@ jobs:
 
       - name: Restore LOYED Android project
         run: |
-          test -f LOYED-Android-Ready-to-upload.zip
-          unzip -q -o LOYED-Android-Ready-to-upload.zip -d .
+          test -f LOYED-Android-Ready-to-upload(1).zip
+          unzip -q -o LOYED-Android-Ready-to-upload(1).zip -d .
           test -f package.json
           test -f capacitor.config.json
           test -f www/index.html
